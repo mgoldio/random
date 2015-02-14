@@ -1,0 +1,22 @@
+<project name="Random" basedir=".">
+  <description>
+    Random build file
+  </description>
+  <property name="src" location="src"/>
+  <property name="bin" location="bin"/>
+
+  <target name="init">
+    <tstamp/>
+    <mkdir dir="${bin}"/>
+  </target>
+
+  <target name="compile" depends="init"
+    description="compile the source " >
+    <javac srcdir="${src}" destdir="${bin}"/>
+  </target>
+
+  <target name="clean"
+    description="clean up" >
+    <delete dir="${bin}"/>
+  </target>
+</project>
