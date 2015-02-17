@@ -67,7 +67,7 @@ public class RandomTester {
      *            the maximum epsilon to allow as a pass
      * @return whether or not the generator passed
      */
-    public boolean testPiEstimateMonteCarloSimulation(final int points, final double acceptedError) {
+    public boolean testPiEstimateMonteCarloSimulation(final long points, final double acceptedError) {
         startTimer();
         println("Running Monte Carlo Simulation");
         printLineSeparator();
@@ -84,16 +84,16 @@ public class RandomTester {
         double percentDiff = (pi - Math.PI) / Math.PI;
         println(String.format("Percent difference between actual value is %f%%",
                 percentDiff * 100.0));
-        if(percentDiff < acceptedError) {
+        if(Math.abs(percentDiff) < acceptedError) {
             println(String.format("Calculated value is within accepted error of %.3f%%; "
                     + "test passed.", acceptedError * 100.0));
             finishTimer();
-            return false;
+            return true;
         }
         println(String.format("Calculated value is not within accepted error of %.3f%%; "
                 + "test failed.", acceptedError * 100.0));
         finishTimer();
-        return true;
+        return false;
     }
 
     /**
@@ -110,15 +110,16 @@ public class RandomTester {
      *            the chi-squared critical value to test against
      * @return whether or not the generator passed
      */
-    public boolean testChiSquaredGoodnessOfFit(final int k, final int independenceDepth, final int n, final double critValue) {
+    public boolean testChiSquaredGoodnessOfFit(final int k, final int independenceDepth,
+            final long n, final double critValue) {
         startTimer();
         println("Running Chi-Squared Goodness of Fit Test");
         printLineSeparator();
         IntSupplier intSupplier = () -> {
             return (int) (supplier.getAsDouble() * k);
         };
-        println(String.format("Running test with k=%d, independenceDepth=%d, n=%d, critVal=%.3f", k,
-                independenceDepth, n, critValue));
+        println(String.format("Running test with k=%d, independenceDepth=%d, n=%d, critVal=%.3f",
+                k, independenceDepth, n, critValue));
         int[] observed = new int[k];
         double expected = n / Math.pow(k, independenceDepth + 1);
         int independenceCounter = 0;
@@ -139,13 +140,14 @@ public class RandomTester {
         }
 
         println(String.format("Chi-squared=%f", chiSquared));
-        if(chiSquared < critValue)
-        {
-            println(String.format("Chi-squared is less than the critical value of %.3f; test passed.", critValue));
+        if(chiSquared < critValue) {
+            println(String.format("Chi-squared is less than the critical value of %.3f; test pa"
+                    + "ssed.", critValue));
             finishTimer();
             return true;
         }
-        println(String.format("Chi-squared is greater than the critical value of %.3f; test failed.", critValue));
+        println(String.format("Chi-squared is greater than the critical value of %.3f; test fai"
+                + "led.", critValue));
         finishTimer();
         return false;
     }
@@ -161,7 +163,8 @@ public class RandomTester {
      *            generators
      * @return whether or not the generator passed
      */
-    public boolean testEntropyWithZipRatio(int characters, double passingCompressionRatio) {
+    public boolean testEntropyWithZipRatio(final long characters,
+            final double passingCompressionRatio) {
         startTimer();
         println("Running Zip Compression Ratio Entropy Test");
         printLineSeparator();
